@@ -64,7 +64,7 @@ class Data {
         const int & Get_key_InitialCondition() const {return _key_InitialCondition;};
 
 
-        const void display_parameters() const;
+        void display_parameters() const;
 
 
 };

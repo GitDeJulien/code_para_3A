@@ -5,23 +5,27 @@
 #include "functions.h"
 
 int main(int argc, char** argv) {
-    std::string filename = "../input/data.dat";
+
+    if (argc < 2)
+    {
+        std::cout << "Please, enter the name of your data file." << std::endl;
+        exit (EXIT_FAILURE);
+    }
+
+    //std::string filename = "./input/data.dat";
+    std::string filename = argv[1];
 
     //Pointer to Data class
     Data* data = new Data(filename);
 
     //Pointer to Function class
-    Function* function = new Function(data);
+    Function* function = new Function();
 
     //Display all the parameters and conditions used for computation
     data->display_parameters();
 
-    //Test function InitialCondition
-    std::cout << "Test InitialCondition (test result is 4): " << function->InitialCondition(data, 2.0, 2.0, 3.0) << std::endl;
-
 
     /*TODO :
-        - Makefile
         - Discrétisation Laplacien (space scheme)
         - Time scheme (Euler explicite, Euler implicite, C-N)
         - Résolution de système linéaire AX=b (CG, BiCG, BiCGStab)

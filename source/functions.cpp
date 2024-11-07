@@ -5,21 +5,16 @@
 #include "functions.h"
 
 
-Function::Function(Data* data)
+Function::Function()
 {
-    // double _Lx = data->Get_Lx();
-    // double _Ly = data->Get_Ly();
-    // int _key_InitialCondition = data->Get_key_InitialCondition();
-    // int _key_SourceTerme = data->Get_key_SourceTerme();
-    // int _key_LeftRightBoundCond = data->Get_key_LeftRightBoundCond();
-    // int _key_UpDownBoundCond = data->Get_key_UpDownBoundCond();
+
 };
 
 
-const double Function::InitialCondition(const Data* data, const double x, const double y, const double t) const 
+double Function::InitialCondition(const Data* data, const double x, const double y) const 
 {
 
-    if (data->Get_key_InitialCondition() == 1) return ExactSolution(data, x, y, 0);
+    if (data->Get_key_InitialCondition() == 1) return ExactSolution(data, x, y);
     else if (data->Get_key_InitialCondition() == 2) return sin(x)+cos(y);
     else if (data->Get_key_InitialCondition() == 3) return 0.0;
     else {
@@ -29,7 +24,7 @@ const double Function::InitialCondition(const Data* data, const double x, const 
 
 }
 
-const double Function::SourceFunction(const Data* data, const double x, const double y, const double t) const 
+double Function::SourceFunction(const Data* data, const double x, const double y, const double t) const 
 {
     if (data->Get_key_SourceTerme() == 1) return 2*(x-x*x+y-y*y);
     else if (data->Get_key_SourceTerme() == 2) return sin(x)+cos(y);
@@ -40,7 +35,7 @@ const double Function::SourceFunction(const Data* data, const double x, const do
     }
 }
 
-const double Function::ExactSolution(const Data* data, const double x, const double y, const double t) const 
+double Function::ExactSolution(const Data* data, const double x, const double y) const 
 {
     if (data->Get_key_SourceTerme() == 1 && data->Get_key_LeftRightBoundCond() == 1 && data->Get_key_UpDownBoundCond() == 1){
         return x * (1-x) * y*(1-y);
@@ -50,11 +45,11 @@ const double Function::ExactSolution(const Data* data, const double x, const dou
     }
     else {
         std::cout << "Exacte solution havn't been determined analyticaly" << std::endl;
-        return NULL;
+        return 0.0;
     }
 }
 
-const double Function::BoundaryCondition_g(const Data* data, const double x, const double y, const double t) const 
+double Function::BoundaryCondition_g(const Data* data, const double x, const double y) const 
 {
     if (data->Get_key_UpDownBoundCond() == 1) return 0.0;
     else if (data->Get_key_UpDownBoundCond() == 2) return 1.0;
@@ -66,7 +61,7 @@ const double Function::BoundaryCondition_g(const Data* data, const double x, con
 
 }
 
-const double Function::BoundaryCondition_h(const Data* data, const double x, const double y, const double t) const 
+double Function::BoundaryCondition_h(const Data* data, const double x, const double y) const 
 {
     if (data->Get_key_LeftRightBoundCond() == 1) return 0.0;
     else if (data->Get_key_LeftRightBoundCond() == 2) return 1.0;

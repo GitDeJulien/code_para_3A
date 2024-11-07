@@ -22,21 +22,21 @@ class Function {
 
     public:
         //Constructor
-        Function(Data* data);
+        Function();
 
         // Initial condition
-        const double InitialCondition(const Data* data, const double x, const double y, const double t) const;
+        double InitialCondition(const Data* data, const double x, const double y) const;
 
         // Source terme
-        const double SourceFunction(const Data* data, const double x, const double y, const double t) const;
+        double SourceFunction(const Data* data, const double x, const double y, const double t) const;
 
         // Exacte solution if it known (uusefull for validation)
-        const double ExactSolution(const Data* data, const double x, const double y, const double t) const;
+        double ExactSolution(const Data* data, const double x, const double y) const;
 
         //Boundary condition
-        const double BoundaryCondition_g(const Data* data, const double x, const double y, const double t) const;
+        double BoundaryCondition_g(const Data* data, const double x, const double y) const;
 
-        const double BoundaryCondition_h(const Data* data, const double x, const double y, const double t) const;
+        double BoundaryCondition_h(const Data* data, const double x, const double y) const;
 
         
 

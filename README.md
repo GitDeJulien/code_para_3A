@@ -1,27 +1,15 @@
 # Mise en oeuvre d'une méthode de décomposition de domaine de type Schwarz sur maillage cartésien régulier
 
-Ce code à pour but de résoudre l'équation de conduction instationnaire en 2D,
-
-\begin{equation*}
-\left \{
-\begin{array}{c c}
-    &\partial_t u(x,y,t) - D\Delta u = f(x,y,t)\\
-    & u|_{\Gamma_0} = g(x,y,t) \\
-    & u|_{\Gamma_1} = h(x,y,t)
-\end{array}
-\right.
-\end{equation*}
-
-en se placant dans le domaine réctangulaire $[0, L_x ] \times [0, L_y ]$ de $\mathbb{R}^2$ avec $\Gamma_0$ le bord regroupant les cotés haut et bas et $\Gamma_1$ le bord regroupant les cotés droite et gauche.
+Ce code à pour but de résoudre l'équation de conduction instationnaire en 2D, $\partial_t u(x,y,t) - D\Delta u = f(x,y,t)$ avec les conditions aux limites $u|_{\Gamma_0} = g(x,y,t)$ et $u|_{\Gamma_1} = h(x,y,t)$ en se placant dans le domaine réctangulaire $[0, L_x ] \times [0, L_y ]$ de $\mathbb{R}^2$ avec $\Gamma_0$ le bord regroupant les cotés haut et bas et $\Gamma_1$ le bord regroupant les cotés droite et gauche.
 
 # Compilation and execution
 
  - Ouvrir un terminal
  - Se placer dans le répertoire 'code_para_3A/'
  -  Compilation :
-    > make
+    - make
  - Execution : 
-    > make exec
+    - make exec
 
 # Architecture du code
 

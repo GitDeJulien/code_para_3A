@@ -16,12 +16,12 @@ en se placant dans le domaine réctangulaire $[0, L_x ] \times [0, L_y ]$ de $\m
 
 # Compilation and execution
 
-    - Ouvrir un terminal
-    - Se placer dans le répertoire 'code_para_3A/'
-    - Compilation :
-> make
-    - Execution : 
-> make exec
+ - Ouvrir un terminal
+ - Se placer dans le répertoire 'code_para_3A/'
+ -  Compilation :
+    > make
+ - Execution : 
+    > make exec
 
 # Architecture du code
 

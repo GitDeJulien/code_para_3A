@@ -52,7 +52,7 @@ double Function::ExactSolution(const Data* data, const double x, const double y)
 double Function::BoundaryCondition_g(const Data* data, const double x, const double y) const 
 {
     if (data->Get_key_UpDownBoundCond() == 1) return 0.0;
-    else if (data->Get_key_UpDownBoundCond() == 2) return 1.0;
+    else if (data->Get_key_UpDownBoundCond() == 2) return 0.0;
     else if (data->Get_key_UpDownBoundCond() == 3) return cos(x) + sin(y);
     else {
         std::cerr << "Error: The UpDown boundary condition key " << data->Get_key_UpDownBoundCond() << " is not referenced" << std::endl;

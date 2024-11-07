@@ -90,7 +90,7 @@ void Data::display_parameters() const {
     }
 
     if (_key_UpDownBoundCond == 1) std::cout << "g = 0 (up/down)" << std::endl;
-    else if (_key_UpDownBoundCond == 2) std::cout << "g = 1 (up/down)" << std::endl;
+    else if (_key_UpDownBoundCond == 2) std::cout << "g = 0 (up/down)" << std::endl;
     else if (_key_UpDownBoundCond == 3) std::cout << "g = sin(x)+cos(y) (up/down)" << std::endl;
     else {
         std::cerr << "Error: The UpDown boundary condition key" << _key_UpDownBoundCond << "is not referenced" << std::endl;
@@ -117,7 +117,7 @@ void Data::display_parameters() const {
 
     if (_key_SourceTerme == 1) std::cout << "Source terme: " << "f = 2*(x-x*x+y-y*y)" << std::endl;
     else if (_key_SourceTerme == 2) std::cout << "Source terme: " << "f = sin(x) + cos(y)" << std::endl;
-    else if (_key_SourceTerme == 3) std::cout << "Source terme: " << "f = exp(-(x-Lx/2)^2)*exp(-(y-_Ly/2)^2)*cos(pi/2*t)" << std::endl;
+    else if (_key_SourceTerme == 3) std::cout << "Source terme: " << "f = exp(-(x-Lx/2)^2)*exp(-(y-Ly/2)^2)*cos(pi/2*t)" << std::endl;
     else {
         std::cerr << "Error: The source terme key" << _key_SourceTerme << "is not referenced" << std::endl;
         exit (EXIT_FAILURE);

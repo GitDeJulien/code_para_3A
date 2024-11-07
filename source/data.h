@@ -2,7 +2,6 @@
 #define _DATA_H
 
 #include <string>
-#include <vector>
 #include <iostream>
 
 class Data {
@@ -47,7 +46,7 @@ class Data {
         // Constructeur
         Data(std::string file_name);
 
-        
+        //Getter
         const double & Get_diffusion_coeff() const {return _diffusionCoeff;};
         const double & Get_Lx() const {return _Lx;};
         const double & Get_Ly() const {return _Ly;};
@@ -63,7 +62,7 @@ class Data {
         const int & Get_key_SourceTerme() const {return _key_SourceTerme;};
         const int & Get_key_InitialCondition() const {return _key_InitialCondition;};
 
-
+        //Display parameters
         void display_parameters() const;
 
 

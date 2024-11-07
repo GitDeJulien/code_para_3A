@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     /*TODO :
         - Discrétisation Laplacien (space scheme)
         - Time scheme (Euler explicite, Euler implicite, C-N)
-        - Résolution de système linéaire AX=b (CG, BiCG, BiCGStab)
+        - Résolution de système linéaire AX=b (CG, BiCG, BiCGStab) (méthode de time scheme)
         - Ajouter une fonction qui écrit les résultat dans le dossier 'output'
     */
 

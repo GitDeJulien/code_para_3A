@@ -30,8 +30,11 @@ class SpaceScheme {
         //Initialize the solution vector at t=0.0
         std::vector<double> Initialize(Data* data, Function* function);
 
-        //Building the Matrix M depending on the scheme
+        //Building the general Matrix M depending on the scheme
         std::vector<std::vector<double>> BuildMatrix(Data* data);
+
+        //Building the Source terme S depending on the border conditions
+        std::vector<double> SourceTerme(Data* data, Function* function);
 
 };
 

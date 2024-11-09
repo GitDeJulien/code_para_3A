@@ -83,7 +83,7 @@ std::vector<std::vector<double>> SpaceScheme::BuildMatrix(Data* data)
                 int indVect = index_MatToVect(data, i, j);
 
                 if(i==j){
-                    matrix[i][j] = 1 + alpha;
+                    matrix[i][j] = alpha;
                 }
                 else if((j==i+1 || i==j+1) && i<=Nx){
                     matrix[i][j] = beta;

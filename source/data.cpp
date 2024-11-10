@@ -40,11 +40,12 @@ Data::Data(std::string file_name)
             // Assign values based on the key
             if (key == "Lx") this->_Lx = double_value;
             else if (key == "Ly") this->_Ly = double_value;
-            else if (key == "hx") this->_hx = double_value;
-            else if (key == "hy") this->_hy = double_value;
+            else if (key == "Nx") this->_Nx = double_value;
+            else if (key == "Ny") this->_Ny = double_value;
             else if (key == "t0") this->_t0 = double_value;
-            else if (key == "tfinal") this->_tfinal = double_value;
+            else if (key == "niter") this->_niter = double_value;
             else if (key == "dt") this->_dt = double_value;
+            else if (key == "cfl") this->_cfl = double_value;
             else if (key == "D") this->_diffusionCoeff = double_value;
             else if (key == "key_time_scheme") this->_key_TimeScheme = int_value;
             else if (key == "key_space_scheme") this->_key_SpaceScheme = int_value;
@@ -62,6 +63,24 @@ Data::Data(std::string file_name)
 
     file.close();
 
+    this->_hx = this->_Lx / (this->_Nx+1);
+    this->_hy = this->_Ly / (this->_Ny+1);
+
+    if (this->_key_TimeScheme==1){ //Euler explicite => CFL
+        this->_dt = this->_cfl*pow(this->_hy,2)*pow(this->_hx,2)/(2*this->_diffusionCoeff*(pow(this->_hx,2)+pow(this->_hy,2)));
+    }
+
+    if (this->_dt<pow(10,-5)){
+        std::cout << "Time step lower bownd have been exceded" << std::endl;
+        std::cout << "Please, reduce diffusion coeficient 'D' " << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // // Number of time iteration
+    // int nb_iterations = (int)ceil((this->_tfinal-this->_t0)/this->_dt);
+    // // To set: _tfinal = _t0 + nb_iterations*_dt
+    // this->_dt = (this->_tfinal-this->_t0) / nb_iterations;
+
 }
 
 void Data::display_parameters() const {
@@ -70,12 +89,13 @@ void Data::display_parameters() const {
     std::cout << "---------------------------------------------" << std::endl;
     std::cout << "Space Parameters:" << std::endl;
     std::cout << "Lx = " << _Lx << ", Ly = " << _Ly << std::endl;
+    std::cout << "Nx = " << _Nx << ", Ny = " << _Ny << std::endl;
     std::cout << "hx = " << _hx << ", hy = " << _hy << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
 
 
     std::cout << "Time Parameters:" << std::endl;
-    std::cout << "t0 = " << _t0 << ", tfinal = " << _tfinal << ", dt = " << _dt << std::endl;
+    std::cout << "t0 = " << _t0 << ", nb_iter = " << _niter << ", dt = " << _dt << ", tfinal = " << _tfinal << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
 
 

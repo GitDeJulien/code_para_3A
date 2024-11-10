@@ -1,7 +1,7 @@
 CPP = g++
 CFLAGS = -Wall -Wextra -O3 -std=c++14
 
-SRCS = source/data.cpp source/functions.cpp source/main.cpp
+SRCS = source/data.cpp source/functions.cpp source/matrix.cpp source/linear_algebra.cpp source/space_scheme.cpp source/time_scheme.cpp source/main.cpp
 TARGET = run
 
 all: $(TARGET)
@@ -14,8 +14,8 @@ exec:
 	./source/run "./input/data.dat"
 
 clean:
-	rm -f source/*.o
 	rm -f output/*.dat
+	rm -f output/*.vtk
 
 clear:
 	rm -f $(TARGET)

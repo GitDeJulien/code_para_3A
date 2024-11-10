@@ -7,6 +7,7 @@
 
 #include "data.h"
 #include "functions.h"
+#include "matrix.h"
 
 class LinearAlgebra {
 
@@ -15,10 +16,10 @@ class LinearAlgebra {
     LinearAlgebra();
 
     //Resolve the linear systeme AX=b with LU decomposition and backward, forward methods
-    void LU(std::vector<std::vector<double>> A, std::vector<double> X , std::vector<double> b);
+    std::vector<double> LU(const Matrix& A, const std::vector<double> b);
 
     //Resolve the linear systeme AX=b with the Bi-Conjugate Gradient Stabilised methode
-    void BiCGStab(std::vector<std::vector<double>> A, std::vector<double> X , std::vector<double> b);
+    std::vector<double> BiCGStab(const Matrix& A, const std::vector<double> b);
 
 };
 

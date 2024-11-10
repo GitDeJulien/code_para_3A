@@ -26,7 +26,7 @@ double Function::InitialCondition(const Data* data, const double x, const double
 
 double Function::SourceFunction(const Data* data, const double x, const double y, const double t) const 
 {
-    if (data->Get_key_SourceTerme() == 1) return 2*(x-x*x+y-y*y);
+    if (data->Get_key_SourceTerme() == 1) return 2*(x-(x*x)+y-(y*y));
     else if (data->Get_key_SourceTerme() == 2) return sin(x)+cos(y);
     else if (data->Get_key_SourceTerme() == 3) return exp(-(x-data->Get_Lx()/2.)*(x-data->Get_Lx()/2.))*exp(-(y-data->Get_Ly()/2.)*(y-data->Get_Ly()/2.))*cos(M_PI/2.*t);
     else {

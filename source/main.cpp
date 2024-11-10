@@ -85,24 +85,14 @@ int main(int argc, char** argv) {
         std::cout << "tn: " << tn << std::endl;
     }
 
-    // std::cout << "Nx : " << Nx << std::endl;
-    // std::cout << "Ny : " << Ny << std::endl;
-    // std::cout << "N=Nx*Ny : " << N << std::endl;
-    // std::cout << "A nb rows : " << A.rows << std::endl;
-    // std::cout << "A nb cols : " << A.cols << std::endl;
-    // std::cout << "Un size : " << Un.size() << std::endl;
-    // std::cout << "Un+1 size : " << Unp1.size() << std::endl;
-    // for (int i=0; i<N; ++i) {
-    //     std::cout << "Source " << i <<": "<< Source[i] << std::endl;
-    // }
-
 
 
     /*TODO :
-        - Discrétisation Laplacien (space scheme)
-        - Time scheme (Euler explicite, Euler implicite, C-N)
-        - Résolution de système linéaire AX=b (CG, BiCG, BiCGStab) (méthode de time scheme)
-        - Ajouter une fonction qui écrit les résultat dans le dossier 'output'
+
+        - Coder le BiCGStab
+        - Comprendre pourquoi ça ne marche pas avec Euler Implicite
+        - Faire une sortie de la solution exacte pour pouvoir comparer en coupe
+        - Commencer à réfléchir à une stratégie de parallélisation
     */
 
 

@@ -1,18 +1,18 @@
 #space
 Lx = 1
-Nx = 10
+Nx = 100
 Ly = 1
-Ny = 10
+Ny = 100
 
 #time
 t0 = 0.0
-niter = 100
+niter = 200
 dt = 0.05
 cfl = 0.8
 
 
 #Time scheme (1: Explicit Euler, 2: Implicit Euler, 3: Crank Nicholson)
-key_time_scheme = 1
+key_time_scheme = 2
 
 #Space scheme (1: Laplacian Centered)
 key_space_scheme = 1

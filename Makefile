@@ -15,7 +15,7 @@ exec:
 
 clean:
 	rm -f output/*.dat
-	rm -f output/*.vtk
+	rm -f output/cas1/*.vtk
 
 clear:
 	rm -f $(TARGET)

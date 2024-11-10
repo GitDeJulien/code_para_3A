@@ -12,7 +12,7 @@ cfl = 0.8
 
 
 #Time scheme (1: Explicit Euler, 2: Implicit Euler, 3: Crank Nicholson)
-key_time_scheme = 2
+key_time_scheme = 1
 
 #Space scheme (1: Laplacian Centered)
 key_space_scheme = 1

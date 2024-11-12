@@ -67,17 +67,19 @@ int main(int argc, char** argv) {
 
     Unp1 = Un;
 
+    tsch->SaveSol(Un, data->Get_outputPath(), 0);
+
     double tn = data->Get_t0();
     double nb_iteration = data->Get_niter();
     double dt = data->Get_dt();
 
-    for(int iter = 0; iter<nb_iteration; ++iter) {
+    for(int iter = 1; iter<nb_iteration; ++iter) {
 
         //Advance of a time step with the chosen time scheme
         Unp1 = tsch->Advance(A, Un, tn);
 
         //Download result in vtk files
-        tsch->SaveSol(Unp1, "output/cas1", iter);
+        tsch->SaveSol(Unp1, data->Get_outputPath(), iter);
 
         //Update
         Un = Unp1;

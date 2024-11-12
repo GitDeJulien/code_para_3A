@@ -14,7 +14,7 @@ Function::Function()
 double Function::InitialCondition(const Data* data, const double x, const double y) const 
 {
 
-    if (data->Get_key_InitialCondition() == 1) return ExactSolution(data, x, y);
+    if (data->Get_key_InitialCondition() == 1) return 100*ExactSolution(data, x, y);
     else if (data->Get_key_InitialCondition() == 2) return sin(x)+cos(y);
     else if (data->Get_key_InitialCondition() == 3) return 0.0;
     else {

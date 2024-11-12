@@ -4,6 +4,12 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stdio.h>
+#include <fstream>
+#include <errno.h>
+#include <cstring>
 
 #include "data.h"
 #include "space_scheme.h"
@@ -35,7 +41,7 @@ class TimeScheme {
 
         std::vector<double> Advance(const Matrix& A, const std::vector<double> Un, const double tn);
 
-        void SaveSol(const std::vector<double> sol, const std::string path, int n);
+        void SaveSol(const std::vector<double>& sol, const std::string& path, int n);
 
 };
 

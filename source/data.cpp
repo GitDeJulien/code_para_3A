@@ -53,6 +53,7 @@ Data::Data(std::string file_name)
             else if (key == "key_UpDownBoundCond") this->_key_UpDownBoundCond = int_value;
             else if (key == "key_SourceTerme") this->_key_SourceTerme = int_value;
             else if (key == "key_InitialCondition") this->_key_InitialCondition = int_value;
+            else if (key == "outputPath") this->_outputPath = line.substr(equal_pos + 2).c_str();
             else {
                 std::cerr << "Error: This parameters is not valid : " << key << std::endl;
                 exit (EXIT_FAILURE);
@@ -76,10 +77,11 @@ Data::Data(std::string file_name)
         exit(EXIT_FAILURE);
     }
 
-    // // Number of time iteration
-    // int nb_iterations = (int)ceil((this->_tfinal-this->_t0)/this->_dt);
-    // // To set: _tfinal = _t0 + nb_iterations*_dt
-    // this->_dt = (this->_tfinal-this->_t0) / nb_iterations;
+    // Number of time iteration
+    this->_tfinal = _dt*_niter; 
+    int nb_iterations = (int)ceil((this->_tfinal-this->_t0)/this->_dt);
+    // To set: _tfinal = _t0 + nb_iterations*_dt
+    this->_dt = (this->_tfinal-this->_t0) / nb_iterations;
 
 }
 
@@ -157,6 +159,7 @@ void Data::display_parameters() const {
     std::cout << "Diffusion coefficient:" << std::endl;
     std::cout << "D = " << _diffusionCoeff << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
+    std::cout << "output path = " << _outputPath << std::endl;
     std::cout <<  std::endl;
 
 }

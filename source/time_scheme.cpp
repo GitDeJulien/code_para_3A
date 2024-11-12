@@ -1,8 +1,6 @@
 #ifndef _TIME_SCHEME_CPP
 #define _TIME_SCHEME_CPP
 
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #include "time_scheme.h"
 
@@ -55,6 +53,7 @@ std::vector<double> TimeScheme::EulerImplicite(const Matrix& A, const std::vecto
     Matrix I = Matrix::Identity(N);
     Matrix A_star = (A.ScalarMultiply(this->_dt)).AddMatrix(I);
     std::vector<double> U_star;
+    U_star.resize(N);
 
     for(int i=0; i<N; ++i) {
         U_star[i] = Un[i] + this->_dt*bnp1[i];
@@ -81,6 +80,7 @@ std::vector<double> TimeScheme::CranckNicholson(const Matrix& A, const std::vect
     Matrix I = Matrix::Identity(N);
     Matrix A_star = (A.ScalarMultiply(this->_dt)).AddMatrix(I);
     std::vector<double> U_star;
+    U_star.resize(N);
 
     U_star = ((A.ScalarMultiply(-this->_dt/2.)).AddMatrix(I)).MatrixVectorProduct(Un);
 
@@ -133,14 +133,19 @@ std::vector<double> TimeScheme::Advance(const Matrix& A, const std::vector<doubl
 
 }
 
-void TimeScheme::SaveSol(const std::vector<double> sol, const std::string path, int n) 
+
+void TimeScheme::SaveSol(const std::vector<double>& sol, const std::string& path, int n) 
 {
-     // Create output directory if it doesn't exist
+
     struct stat info;
     if (stat(path.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR)) {
-        // Create the directory
-        mkdir("output", 0777);
-        mkdir("output/cas1", 0777);
+        // Try to create the directory
+        if (mkdir(path.c_str(), 0777) == -1) {
+            std::cerr << "Error creating directory: " << strerror(errno) << std::endl;
+            exit(EXIT_FAILURE);
+        } else {
+            std::cout << "Directory " << path << " created successfully." << std::endl;
+        }
     }
     std::string n_file = path + "/sol_" + std::to_string(n) + ".vtk";
     std::ofstream solution;
@@ -176,6 +181,8 @@ void TimeScheme::SaveSol(const std::vector<double> sol, const std::string path, 
         std::cout << "Error opening results file!" << std::endl;
     }
 }
+
+
 
 
 #endif

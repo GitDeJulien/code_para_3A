@@ -39,8 +39,11 @@ class Data {
         //Initial condition key
         int _key_InitialCondition;
 
-        //Other
+        //Diffusion coefficient D
         double _diffusionCoeff;
+
+        //Output path
+        std::string _outputPath;
 
         
 
@@ -69,10 +72,11 @@ class Data {
         const int & Get_key_UpDownBoundCond() const {return _key_UpDownBoundCond;};
         const int & Get_key_SourceTerme() const {return _key_SourceTerme;};
         const int & Get_key_InitialCondition() const {return _key_InitialCondition;};
+        const std::string & Get_outputPath() const {return _outputPath;};
+
 
         //Display parameters
         void display_parameters() const;
-
 
 };
 

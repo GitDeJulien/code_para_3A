@@ -34,9 +34,14 @@ class Function {
         double ExactSolution(const Data* data, const double x, const double y) const;
 
         //Boundary condition
-        double BoundaryCondition_g(const Data* data, const double x, const double y) const;
+        double BoundaryCondition_Right(const Data* data, const double x, const double y) const;
 
-        double BoundaryCondition_h(const Data* data, const double x, const double y) const;
+        double BoundaryCondition_Left(const Data* data, const double x, const double y) const;
+
+        double BoundaryCondition_Up(const Data* data, const double x, const double y) const;
+
+        double BoundaryCondition_Down(const Data* data, const double x, const double y) const;
+
 
         
 

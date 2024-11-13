@@ -30,8 +30,10 @@ class Data {
         int _key_SpaceScheme;
 
         //Boundary conditions key
-        int _key_LeftRightBoundCond;
-        int _key_UpDownBoundCond;
+        int _key_RightBoundCond;
+        int _key_LeftBoundCond;
+        int _key_DownBoundCond;
+        int _key_UpBoundCond;
 
         //Source terme key
         int _key_SourceTerme;
@@ -68,8 +70,10 @@ class Data {
         const double & Get_tfinal() const {return _tfinal;};
         const int & Get_TimeScheme() const {return _key_TimeScheme;};
         const int & Get_SpaceScheme() const {return _key_SpaceScheme;};
-        const int & Get_key_LeftRightBoundCond() const {return _key_LeftRightBoundCond;};
-        const int & Get_key_UpDownBoundCond() const {return _key_UpDownBoundCond;};
+        const int & Get_key_RightBoundCond() const {return _key_RightBoundCond;};
+        const int & Get_key_LeftBoundCond() const {return _key_LeftBoundCond;};
+        const int & Get_key_UpBoundCond() const {return _key_UpBoundCond;};
+        const int & Get_key_DownBoundCond() const {return _key_DownBoundCond;};
         const int & Get_key_SourceTerme() const {return _key_SourceTerme;};
         const int & Get_key_InitialCondition() const {return _key_InitialCondition;};
         const std::string & Get_outputPath() const {return _outputPath;};

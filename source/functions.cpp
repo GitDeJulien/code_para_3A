@@ -37,10 +37,10 @@ double Function::SourceFunction(const Data* data, const double x, const double y
 
 double Function::ExactSolution(const Data* data, const double x, const double y) const 
 {
-    if (data->Get_key_SourceTerme() == 1 && data->Get_key_LeftRightBoundCond() == 1 && data->Get_key_UpDownBoundCond() == 1){
+    if (data->Get_key_SourceTerme() == 1 && data->Get_key_RightBoundCond() == 1 && data->Get_key_LeftBoundCond() == 1 && data->Get_key_DownBoundCond() == 1 && data->Get_key_UpBoundCond() == 1){
         return x * (1-x) * y*(1-y);
     }
-    else if (data->Get_key_SourceTerme() == 2 && data->Get_key_LeftRightBoundCond() == 3 && data->Get_key_UpDownBoundCond() == 3){
+    else if (data->Get_key_SourceTerme() == 2 && data->Get_key_RightBoundCond() == 2 && data->Get_key_LeftBoundCond() == 2 && data->Get_key_UpBoundCond() == 2 && data->Get_key_DownBoundCond() == 2){
         return sin(x) + cos(y);
     }
     else {
@@ -49,25 +49,47 @@ double Function::ExactSolution(const Data* data, const double x, const double y)
     }
 }
 
-double Function::BoundaryCondition_g(const Data* data, const double x, const double y) const 
+double Function::BoundaryCondition_Left(const Data* data, const double x, const double y) const 
 {
-    if (data->Get_key_UpDownBoundCond() == 1) return 0.0;
-    else if (data->Get_key_UpDownBoundCond() == 2) return 0.0;
-    else if (data->Get_key_UpDownBoundCond() == 3) return cos(x) + sin(y);
+    if (data->Get_key_LeftBoundCond() == 1) return 0.0;
+    else if (data->Get_key_LeftBoundCond() == 2) return cos(x) + sin(y);
+    else if (data->Get_key_LeftBoundCond() == 3) return 1.0;
     else {
-        std::cerr << "Error: The UpDown boundary condition key " << data->Get_key_UpDownBoundCond() << " is not referenced" << std::endl;
+        std::cerr << "Error: The Left boundary condition key " << data->Get_key_LeftBoundCond() << " is not referenced" << std::endl;
         exit (EXIT_FAILURE);
     }
 
 }
 
-double Function::BoundaryCondition_h(const Data* data, const double x, const double y) const 
+double Function::BoundaryCondition_Right(const Data* data, const double x, const double y) const 
 {
-    if (data->Get_key_LeftRightBoundCond() == 1) return 0.0;
-    else if (data->Get_key_LeftRightBoundCond() == 2) return 1.0;
-    else if (data->Get_key_LeftRightBoundCond() == 3) return cos(x) + sin(y);
+    if (data->Get_key_RightBoundCond() == 1) return 0.0;
+    else if (data->Get_key_RightBoundCond() == 2) return cos(x) + sin(y);
+    else if (data->Get_key_RightBoundCond() == 3) return 1.0;
     else {
-        std::cerr << "Error: The LeftRight boundary condition key" << data->Get_key_LeftRightBoundCond() << "is not referenced" << std::endl;
+        std::cerr << "Error: The Right boundary condition key" << data->Get_key_RightBoundCond() << "is not referenced" << std::endl;
+        exit (EXIT_FAILURE);
+    }
+}
+
+double Function::BoundaryCondition_Up(const Data* data, const double x, const double y) const 
+{
+    if (data->Get_key_UpBoundCond() == 1) return 0.0;
+    else if (data->Get_key_UpBoundCond() == 2) return cos(x) + sin(y);
+    else if (data->Get_key_UpBoundCond() == 3) return 1.0;
+    else {
+        std::cerr << "Error: The Up boundary condition key" << data->Get_key_UpBoundCond() << "is not referenced" << std::endl;
+        exit (EXIT_FAILURE);
+    }
+}
+
+double Function::BoundaryCondition_Down(const Data* data, const double x, const double y) const 
+{
+    if (data->Get_key_DownBoundCond() == 1) return 0.0;
+    else if (data->Get_key_DownBoundCond() == 2) return cos(x) + sin(y);
+    else if (data->Get_key_DownBoundCond() == 3) return 1.0;
+    else {
+        std::cerr << "Error: The Down boundary condition key" << data->Get_key_DownBoundCond() << "is not referenced" << std::endl;
         exit (EXIT_FAILURE);
     }
 }

@@ -140,6 +140,23 @@ std::vector<double> SpaceScheme::SourceTerme(Data* data, Function* function, con
             y = j*data->Get_hy();
 
             S[l] = function->SourceFunction(data, x, y, t);
+
+            if (i==1) { 
+                //Derichlet non homogène
+                S[l] += data->Get_diffusion_coeff()/(data->Get_hx()*data->Get_hx()) * function->BoundaryCondition_Left(data, x, y);
+            }
+            if (i==Nx) { 
+                //Derichlet non homogène
+                S[l] += data->Get_diffusion_coeff()/(data->Get_hx()*data->Get_hx()) * function->BoundaryCondition_Right(data, x, y);
+            }
+            if (j==1) {
+                //Derichlet non homogène
+                S[l] += data->Get_diffusion_coeff()/(data->Get_hy()*data->Get_hy()) * function->BoundaryCondition_Down(data, x, y);
+            }
+            if (j==1) {
+                //Derichlet non homogène
+                S[l] += data->Get_diffusion_coeff()/(data->Get_hy()*data->Get_hy()) * function->BoundaryCondition_Up(data, x, y);
+            }
         }
     }
 

@@ -49,8 +49,10 @@ Data::Data(std::string file_name)
             else if (key == "D") this->_diffusionCoeff = double_value;
             else if (key == "key_time_scheme") this->_key_TimeScheme = int_value;
             else if (key == "key_space_scheme") this->_key_SpaceScheme = int_value;
-            else if (key == "key_LeftRightBoundCond") this->_key_LeftRightBoundCond = int_value;
-            else if (key == "key_UpDownBoundCond") this->_key_UpDownBoundCond = int_value;
+            else if (key == "key_RightBoundCond") this->_key_RightBoundCond = int_value;
+            else if (key == "key_LeftBoundCond") this->_key_LeftBoundCond = int_value;
+            else if (key == "key_UpBoundCond") this->_key_UpBoundCond = int_value;
+            else if (key == "key_DownBoundCond") this->_key_DownBoundCond = int_value;
             else if (key == "key_SourceTerme") this->_key_SourceTerme = int_value;
             else if (key == "key_InitialCondition") this->_key_InitialCondition = int_value;
             else if (key == "outputPath") this->_outputPath = line.substr(equal_pos + 2).c_str();
@@ -103,19 +105,35 @@ void Data::display_parameters() const {
 
 
     std::cout << "Boundary condition:" << std::endl;
-    if (_key_LeftRightBoundCond == 1) std::cout << "h = 0 (left/right)" << std::endl;
-    else if (_key_LeftRightBoundCond == 2) std::cout << "h = 1 (left/right)" << std::endl;
-    else if (_key_LeftRightBoundCond == 3) std::cout << "h = sin(x)+cos(y) (left/right)" << std::endl;
+    if (_key_LeftBoundCond == 1) std::cout << "Left = 0" << std::endl;
+    else if (_key_LeftBoundCond == 2) std::cout << "Left = sin(x)+cos(y)" << std::endl;
+    else if (_key_LeftBoundCond == 3) std::cout << "Left = 1" << std::endl;
     else {
-        std::cerr << "Error: The LeftRight boundary condition key" << _key_LeftRightBoundCond << "is not referenced" << std::endl;
+        std::cerr << "Error: The Left boundary condition key" << _key_LeftBoundCond << "is not referenced" << std::endl;
         exit (EXIT_FAILURE);
     }
 
-    if (_key_UpDownBoundCond == 1) std::cout << "g = 0 (up/down)" << std::endl;
-    else if (_key_UpDownBoundCond == 2) std::cout << "g = 0 (up/down)" << std::endl;
-    else if (_key_UpDownBoundCond == 3) std::cout << "g = sin(x)+cos(y) (up/down)" << std::endl;
+    if (_key_RightBoundCond == 1) std::cout << "Right = 0" << std::endl;
+    else if (_key_RightBoundCond == 2) std::cout << "Right = sin(x)+cos(y)" << std::endl;
+    else if (_key_RightBoundCond == 3) std::cout << "Right = 1" << std::endl;
     else {
-        std::cerr << "Error: The UpDown boundary condition key" << _key_UpDownBoundCond << "is not referenced" << std::endl;
+        std::cerr << "Error: The Right boundary condition key" << _key_RightBoundCond << "is not referenced" << std::endl;
+        exit (EXIT_FAILURE);
+    }
+
+    if (_key_UpBoundCond == 1) std::cout << "Up = 0" << std::endl;
+    else if (_key_UpBoundCond == 2) std::cout << "Up = sin(x)+cos(y)" << std::endl;
+    else if (_key_UpBoundCond == 3) std::cout << "Up = 1" << std::endl;
+    else {
+        std::cerr << "Error: The Up boundary condition key" << _key_UpBoundCond << "is not referenced" << std::endl;
+        exit (EXIT_FAILURE);
+    }
+
+    if (_key_DownBoundCond == 1) std::cout << "Down = 0" << std::endl;
+    else if (_key_DownBoundCond == 2) std::cout << "Down = sin(x)+cos(y)" << std::endl;
+    else if (_key_DownBoundCond == 3) std::cout << "Down = 1" << std::endl;
+    else {
+        std::cerr << "Error: The Down boundary condition key" << _key_DownBoundCond << "is not referenced" << std::endl;
         exit (EXIT_FAILURE);
     }
     std::cout << "---------------------------------------------" << std::endl;

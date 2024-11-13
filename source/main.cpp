@@ -66,6 +66,7 @@ int main(int argc, char** argv) {
 
     tsch->SaveSol(Un, data->Get_outputPath(), 0);
 
+
     double tn = data->Get_t0();
     double nb_iteration = data->Get_niter();
     double dt = data->Get_dt();
@@ -84,13 +85,20 @@ int main(int argc, char** argv) {
         std::cout << "tn: " << tn << std::endl;
     }
 
+    std::vector<double> U_exact(N,0.0);
+    for(int i=1; i<=Nx; ++i){
+        for(int j=1; j<=Ny; ++j){
+            int l = (j-1)*Nx + (i-1);
+            double x = i*data->Get_hx();
+            double y = j*data->Get_hy();
+            U_exact[l] = function->ExactSolution(data, x, y);
+        }
+    }
 
+    tsch->SaveSol(U_exact, "output/Exact2", 0);
 
     /*TODO :
 
-        - Coder le BiCGStab
-        - Comprendre pourquoi ça ne marche pas avec Euler Implicite
-        - Faire une sortie de la solution exacte pour pouvoir comparer en coupe
         - Commencer à réfléchir à une stratégie de parallélisation
     */
 

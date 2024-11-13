@@ -59,8 +59,8 @@ std::vector<double> TimeScheme::EulerImplicite(const Matrix& A, const std::vecto
         U_star[i] = Un[i] + this->_dt*bnp1[i];
     }
 
-    Unp1 = _lin->LU(A_star, U_star);
-    //Unp1 = _lin->BiCGStab(A_star, U_star, 10000, 1e-6);
+    //Unp1 = _lin->LU(A_star, U_star);
+    Unp1 = _lin->BiCGStab(A_star, U_star, 10000, 1e-6);
 
     return Unp1;
 }

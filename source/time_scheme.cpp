@@ -60,6 +60,7 @@ std::vector<double> TimeScheme::EulerImplicite(const Matrix& A, const std::vecto
     }
 
     Unp1 = _lin->LU(A_star, U_star);
+    //Unp1 = _lin->BiCGStab(A_star, U_star, 10000, 1e-6);
 
     return Unp1;
 }
@@ -78,7 +79,7 @@ std::vector<double> TimeScheme::CranckNicholson(const Matrix& A, const std::vect
 
     //Identity matrix
     Matrix I = Matrix::Identity(N);
-    Matrix A_star = (A.ScalarMultiply(this->_dt)).AddMatrix(I);
+    Matrix A_star = (A.ScalarMultiply(this->_dt/2.)).AddMatrix(I);
     std::vector<double> U_star;
     U_star.resize(N);
 
@@ -88,7 +89,7 @@ std::vector<double> TimeScheme::CranckNicholson(const Matrix& A, const std::vect
         U_star[i] += this->_dt/2.*(bnp1[i]+bn[i]);
     }
 
-    Unp1 = _lin->LU(A_star, U_star);
+    Unp1 = _lin->BiCGStab(A_star, U_star, 10000, 1e-6);
 
     return Unp1;
 }
@@ -141,8 +142,7 @@ void TimeScheme::SaveSol(const std::vector<double>& sol, const std::string& path
     if (stat(path.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR)) {
         // Try to create the directory
         if (mkdir(path.c_str(), 0777) == -1) {
-            std::cerr << "Error creating directory: " << strerror(errno) << std::endl;
-            exit(EXIT_FAILURE);
+            std::cout << "Directory already exist." << std::endl;
         } else {
             std::cout << "Directory " << path << " created successfully." << std::endl;
         }

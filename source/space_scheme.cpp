@@ -10,12 +10,12 @@ SpaceScheme::SpaceScheme(){}
 
 int SpaceScheme::index_MatToVect(Data* data, const int i, const int j)
 {
-    int Ny(0);
+    int Nx(0);
     int l(0);
 
-    Ny = data->Get_Ny();
+    Nx = data->Get_Nx();
 
-    l = i*Ny + j;
+    l = (j-1)*Nx + (i-1);
 
     return(l);
 }
@@ -28,8 +28,8 @@ std::pair<int, int> SpaceScheme::index_VectToMat(Data* data, const int l) {
 
     Ny = data->Get_Ny();
 
-    i = l/Ny;
-    j = l%Ny;
+    i = l/Ny+1;
+    j = l%Ny+1;
 
     return {i,j};
 }
@@ -47,8 +47,8 @@ std::vector<double> SpaceScheme::Initialize(Data* data, Function* function)
     int N = Nx*Ny;
     U0.resize(N);
 
-    for(int i=0; i<Nx; ++i){
-        for(int j=0; j<Ny; ++j){
+    for(int i=1; i<=Nx; ++i){
+        for(int j=1; j<=Ny; ++j){
             l = index_MatToVect(data, i, j);
 
             x = i*data->Get_hx();
@@ -84,21 +84,29 @@ Matrix SpaceScheme::BuildMatrix(Data* data)
 
     Matrix matrix(N,N);
 
-    if(data->Get_SpaceScheme() == 1){ //Laplacian centered discretisation
-        for(int i=0; i<N; ++i){
-            for(int j=0; j<N; ++j){
+    for (int I=0; I<N; ++I) {
+        for (int J=0; J<N; ++J){
+            matrix(I,J) = 0.0;
+        }
+    }
 
-                if(i==j){
-                    matrix(i,j) = alpha;
+    if(data->Get_SpaceScheme() == 1){ //Laplacian centered discretisation
+        for(int i=1; i<=Nx; ++i){
+            for(int j=1; j<=Ny; ++j){
+                int l = this->index_MatToVect(data, i, j);
+
+                matrix(l,l) = alpha;
+                if (i>1) {
+                    matrix(l,l-1) = beta;
                 }
-                else if((j==i+1 || i==j+1) && i<=Nx){
-                    matrix(i,j) = beta;
+                if (i<Nx){
+                    matrix(l,l+1) = beta;
                 }
-                else if((j==i+1 || i==j+1) && i>Nx){
-                    matrix(i,j) = gamma;
+                if (j>1) {
+                    matrix(l,l-Nx) = gamma;
                 }
-                else {
-                    matrix(i,j) = 0.0;
+                if (j<Ny) {
+                    matrix(l,l+Nx) = gamma;
                 }
             }
         }
@@ -124,8 +132,8 @@ std::vector<double> SpaceScheme::SourceTerme(Data* data, Function* function, con
     int N = Nx*Ny;
     S.resize(N);
 
-    for(int i=0; i<Nx; ++i){
-        for(int j=0; j<Ny; ++j){
+    for(int i=1; i<=Nx; ++i){
+        for(int j=1; j<=Ny; ++j){
             l = index_MatToVect(data, i, j);
 
             x = i*data->Get_hx();

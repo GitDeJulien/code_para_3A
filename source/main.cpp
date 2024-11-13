@@ -62,9 +62,6 @@ int main(int argc, char** argv) {
     //Initial solution
     Un = ssch->Initialize(data, function);
 
-    //Source terme
-    Sn = ssch->SourceTerme(data, function, 0.0);
-
     Unp1 = Un;
 
     tsch->SaveSol(Un, data->Get_outputPath(), 0);

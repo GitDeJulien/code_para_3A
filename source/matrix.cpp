@@ -70,5 +70,17 @@ Matrix Matrix::Identity(int size) {
     return identity;
 }
 
+int Matrix::getRows() const {
+    return rows;
+}
+
+int Matrix::getCols() const {
+    return cols;
+}
+
+double Matrix::operator*(const Matrix &A, const Matrix &B) const {
+    return 0;
+}
+
 
 #endif

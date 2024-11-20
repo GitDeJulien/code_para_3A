@@ -8,35 +8,52 @@
 
 class Matrix {
 
-    public:
+private:
 
-        std::vector<double> data;
-        int rows, cols;
+    std::vector<double> data;
+    int rows, cols;
 
-        // Constructor prototype
-        Matrix(int r, int c);
+public:
 
-        //Matrix(int r, int c) : rows(r), cols(c), data(r * c, 0) {};
+    // Constructor prototype
+    Matrix(int r, int c): rows(r), cols(c){
+        for(size_t i=0;i<rows;i++){
+            for(size_t j=0;j<rows;j++){
+                data[i*cols+j] = 0;
+            }
+        }
+    };
 
-        double& operator()(int i, int j) { return data[i * cols + j]; };
-        const double& operator()(int i, int j) const { return data[i * cols + j]; };
+    //Matrix(int r, int c) : rows(r), cols(c), data(r * c, 0) {};
 
-        // Method to multiply a matrix with a vector
-        std::vector<double> MatrixVectorProduct(const std::vector<double>& x) const;
+    double& operator()(int i, int j) { return data[i * cols + j]; };
+    const double& operator()(int i, int j) const { return data[i * cols + j]; };
+    std::vector<double> operator()(int i) const { //Extraire une ligne
+        std::vector<double> row;
+        for(size_t j=0; j<cols; j++){
+            row.push_back(data[i*cols + j]);
+        }
+        return row;
+    };
 
-        // Method to multiply two matrices
-        Matrix MatrixMatrixProduct(const Matrix& B) const;
+    // Method to multiply a matrix with a vector
+    std::vector<double> MatrixVectorProduct(const std::vector<double>& x) const;
 
-        // Method to add two matrices
-        Matrix AddMatrix(const Matrix& B) const;
+    // Method to multiply two matrices
+    Matrix MatrixMatrixProduct(const Matrix& B) const;
 
-        // Method to multiply matrix by a scalar value
-        Matrix ScalarMultiply(double lambda) const;
+    // Method to add two matrices
+    Matrix AddMatrix(const Matrix& B) const;
 
-        // Static method to generate an identity matrix
-        static Matrix Identity(int size);
+    // Method to multiply matrix by a scalar value
+    Matrix ScalarMultiply(double lambda) const;
 
+    // Static method to generate an identity matrix
+    static Matrix Identity(int size);
 
+    int getRows() const;
+
+    int getCols() const;
 };
 
 

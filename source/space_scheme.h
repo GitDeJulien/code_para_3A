@@ -9,6 +9,7 @@
 #include "data.h"
 #include "functions.h"
 #include "matrix.h"
+#include "helpers.h"
 
 class SpaceScheme {
 
@@ -16,26 +17,33 @@ class SpaceScheme {
 
     double* _sol0; 
     double* _Matrix;
+    Data data;
 
     public:
 
         //Constructor
-        SpaceScheme();
+        SpaceScheme(Data data): data(data){};
 
-        //Transforme matrix index (i,j) in vector index l
-        int index_MatToVect(Data* data, const int i, const int j);
+        //Transform matrix index (i,j) in vector index l
+        int index_MatToVect(const int i, const int j);
 
-        //Transforme matrix index (i,j) in vector index l
-        std::pair<int, int> index_VectToMat(Data* data, const int l);
+        //Transform matrix index (i,j) in vector index l
+        std::pair<int, int> index_VectToMat(const int l);
 
         //Initialize the solution vector at t=0.0
-        std::vector<double> Initialize(Data* data, Function* function);
+        std::vector<double> Initialize(Function* function);
+
+        Matrix Initialize2(Function* function);
 
         //Building the general Matrix M depending on the scheme
-        Matrix BuildMatrix(Data* data);
+        Matrix BuildMatrix();
+
+        std::pair<Matrix,Matrix> BuildMatrix2();
 
         //Building the Source terme S depending on the border conditions
-        std::vector<double> SourceTerme(Data* data, Function* function, const double t);
+        std::vector<double> SourceTerme(Function* function, const double t);
+
+        Matrix SourceTerm2(Function* function, const double t);
 
 };
 

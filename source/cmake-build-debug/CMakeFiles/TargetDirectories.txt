@@ -1,0 +1,3 @@
+C:/Users/UTENTE/OneDrive/Polimi/ERASMUS/Calcul parallele/Projet/code_para_3A/source/cmake-build-debug/CMakeFiles/new_target.dir
+C:/Users/UTENTE/OneDrive/Polimi/ERASMUS/Calcul parallele/Projet/code_para_3A/source/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/UTENTE/OneDrive/Polimi/ERASMUS/Calcul parallele/Projet/code_para_3A/source/cmake-build-debug/CMakeFiles/rebuild_cache.dir

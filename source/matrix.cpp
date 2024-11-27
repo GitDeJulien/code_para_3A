@@ -1,10 +1,9 @@
 #ifndef _MATRIX_CPP
 #define _MATRIX_CPP
 
+#include <iomanip>
 #include "matrix.h"
 
-
-Matrix::Matrix(int r, int c) : data(r * c, 0), rows(r), cols(c) {}
 
 std::vector<double> Matrix::MatrixVectorProduct(const std::vector<double>& x) const {
     if (cols != static_cast<int>(x.size())) {
@@ -78,9 +77,14 @@ int Matrix::getCols() const {
     return cols;
 }
 
-double Matrix::operator*(const Matrix &A, const Matrix &B) const {
-    return 0;
+void Matrix::print() const{
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            std::cout << std::setw(10) << std::setprecision(4) << data[i * cols + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    printf("\n");
 }
-
 
 #endif

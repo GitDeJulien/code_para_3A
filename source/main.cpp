@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include<time.h>
+//#include <mscat.h>
 
 #include "data.h"
 #include "functions.h"
@@ -23,61 +24,60 @@ int main(int argc, char** argv) {
     std::string filename = argv[1];
 
     //Pointer to Data class
-    Data* data = new Data(filename);
+    Data data(filename);
 
     //Pointer to Function class
-    Function* function = new Function();
+    Function function(data);
 
     //Pointer to Linear Algebra class
-    LinearAlgebra* lin = new LinearAlgebra();
+    LinearAlgebra lin = LinearAlgebra();
 
     //Pointer to Space Scheme class
-    SpaceScheme* ssch = new SpaceScheme();
+    SpaceScheme ssch = SpaceScheme(data);
 
     //Pointer to Time Scheme class
-    TimeScheme* tsch = new TimeScheme(data, lin, function, ssch);
+    TimeScheme tsch = TimeScheme(data, &lin, &function, &ssch);
 
     //Pointer to Matrix class
     //Matrix* matrix = new Matrix();
 
     //Display all the parameters and conditions used for computation
-    data->display_parameters();
+    data.display_parameters();
 
     int Nx(0);
     int Ny(0);
     int N(0);
 
-    Nx = data->Get_Nx();
-    Ny = data->Get_Ny();
+    Nx = data.Get_Nx();
+    Ny = data.Get_Ny();
     N = Nx*Ny;
 
     Matrix A(N,N);
-    std::vector<double> Un;
-    std::vector<double> Unp1;
-    std::vector<double> Sn;
+    Matrix Un(Nx,Ny);
+    Matrix Sn(Nx,Ny);
 
     //Laplacian matrix discretisation
-    A = ssch->BuildMatrix(data);
+    std::pair<Matrix,Matrix> matrices = ssch.BuildMatrix2();
 
     //Initial solution
-    Un = ssch->Initialize(data, function);
+    Un = ssch.Initialize2(&function);
 
-    Unp1 = Un;
+    Matrix Unp1 = Un;
 
-    tsch->SaveSol(Un, data->Get_outputPath(), 0);
+    tsch.SaveSol(Un, data.Get_outputPath(), 0);
 
 
-    double tn = data->Get_t0();
-    double nb_iteration = data->Get_niter();
-    double dt = data->Get_dt();
+    double tn = data.Get_t0();
+    double nb_iteration = data.Get_niter();
+    double dt = data.Get_dt();
 
     for(int iter = 1; iter<nb_iteration; ++iter) {
 
         //Advance of a time step with the chosen time scheme
-        Unp1 = tsch->Advance(A, Un, tn);
+        Unp1 = tsch.Advance(matrices.first, matrices.second, Un, tn);
 
         //Download result in vtk files
-        tsch->SaveSol(Unp1, data->Get_outputPath(), iter);
+        tsch.SaveSol(Unp1, data.Get_outputPath(), iter);
 
         //Update
         Un = Unp1;
@@ -85,26 +85,23 @@ int main(int argc, char** argv) {
         std::cout << "tn: " << tn << std::endl;
     }
 
-    std::vector<double> U_exact(N,0.0);
+    Matrix U_exact(Nx,Ny);
+    double x;
+    double y;
     for(int i=1; i<=Nx; ++i){
         for(int j=1; j<=Ny; ++j){
-            int l = (j-1)*Nx + (i-1);
-            double x = i*data->Get_hx();
-            double y = j*data->Get_hy();
-            U_exact[l] = function->ExactSolution(data, x, y);
+            x = i*data.Get_hx();
+            y = j*data.Get_hy();
+            U_exact(i-1,j-1) = function.ExactSolution(x, y);
         }
     }
 
-    tsch->SaveSol(U_exact, "output/Exact2", 0);
+    tsch.SaveSol(U_exact, "output/Exact2", 0);
 
-    /*TODO :
+    //TODO :
 
-        - Commencer à réfléchir à une stratégie de parallélisation
-    */
+        //- Commencer à réfléchir à une stratégie de parallélisation
 
-
-    //Pointer deletion
-    delete data, delete function, delete lin, delete ssch, delete tsch;
     return 0;
 }
 
@@ -112,7 +109,31 @@ int main(int argc, char** argv) {
 //############################//
 //########## TEST ############//
 //############################//
-
+/*
+// Test Liapunov
+int main(){
+    Matrix A(3,3,1);
+    Matrix B(3,3,1);
+    Matrix C(3,3,1);
+    B = 10*B;
+    A = 2*A;
+    C(0,1) = -1;
+    C(1,0) = 3;
+    B(0,1) = -1;
+    B(1,0) = -1;
+    A(1,0) = -1;
+    A(0,1) = -1;
+    A(1,2) = -1;
+    A(2,1) = -1;
+    B(2,1) = -1;
+    B(1,2) = -1;
+    A.print();
+    B.print();
+    C.print();
+    LinearAlgebra lin;
+    Matrix X = lin.solveLiap(A,B,C,1000);
+    X.print();
+}*/
 /*
 TEST MATRIX CLASS
 

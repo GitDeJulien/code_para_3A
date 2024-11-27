@@ -53,6 +53,7 @@ class Data {
     public:
 
         // Constructeur
+        Data()=default;
         Data(std::string file_name);
 
         //Getter

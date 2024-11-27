@@ -1,20 +1,35 @@
 //
-// Created by UTENTE on 13/11/2024.
+// Created by UTENTE on 23/11/2024.
 //
 
-#ifndef SOURCE_HELPERS_H
 #define SOURCE_HELPERS_H
-
+#include "matrix.h"
 #include <string>
 #include <iostream>
 #include <vector>
 
+    double operator*(const std::vector<double>& a, const std::vector<double>& b);
 
-double operator*(const std::vector<double>& a, const std::vector<double>& b) {
-    double result = 0.0;
-    for (size_t i = 0; i < a.size(); ++i)
-        result += a[i] * b[i];
-    return result;
-}
+    Matrix operator*(const Matrix & A, const Matrix & B);
 
-#endif //SOURCE_HELPERS_H
+    Matrix operator*(const Matrix & A, double mu);
+
+    Matrix operator*(double mu,const Matrix & A);
+
+    std::vector<double> operator*(const Matrix & A, const std::vector<double> & b);
+
+    double norm(const std::vector<double> & a);
+
+    double norm(const Matrix & A);
+
+    Matrix operator+(const Matrix& A, const Matrix& B);
+
+    Matrix operator-(const Matrix& A, const Matrix& B);
+
+    Matrix trMatrix(const Matrix & A);
+
+    std::vector<double> computeAdiCoefficients(int n, double diagA, double subdiagA, double diagB, double subdiagB, int numCoefficients);
+
+    void computeSpectralBounds(int n, double diag, double subdiag, double &lambda_min, double &lambda_max);
+
+

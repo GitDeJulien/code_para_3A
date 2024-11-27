@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include "data.h"
 
 class Matrix {
 
@@ -16,15 +17,27 @@ private:
 public:
 
     // Constructor prototype
-    Matrix(int r, int c): rows(r), cols(c){
+    /*
+    Matrix(int r,int c): rows(r), cols(c){
+        std::vector<double> data;
         for(size_t i=0;i<rows;i++){
-            for(size_t j=0;j<rows;j++){
+            for(size_t j=0;j<cols;j++){
                 data[i*cols+j] = 0;
             }
         }
     };
+    */
+    Matrix(int r, int c, int type) : rows(r), cols(c), data(r*c, 0){
+        for(size_t i=0;i<rows;i++){
+            for(size_t j=0;j<cols;j++){
+                if(i == j && type == 1){
+                    data[i+cols*j] = 1;
+                }
+            }
+        }
+    };
 
-    //Matrix(int r, int c) : rows(r), cols(c), data(r * c, 0) {};
+    Matrix(int r, int c) : rows(r), cols(c), data(r * c, 0){};
 
     double& operator()(int i, int j) { return data[i * cols + j]; };
     const double& operator()(int i, int j) const { return data[i * cols + j]; };
@@ -50,6 +63,8 @@ public:
 
     // Static method to generate an identity matrix
     static Matrix Identity(int size);
+
+    void print() const;
 
     int getRows() const;
 

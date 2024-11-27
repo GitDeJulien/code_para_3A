@@ -17,30 +17,31 @@ class Function {
     //     int _key_SourceTerme;
     //     int _key_LeftRightBoundCond;
     //     int _key_UpDownBoundCond;
+    Data data;
 
 
 
     public:
         //Constructor
-        Function();
+        Function(const Data & data): data(data){};
 
         // Initial condition
-        double InitialCondition(const Data* data, const double x, const double y) const;
+        double InitialCondition(const double x, const double y) const;
 
         // Source terme
-        double SourceFunction(const Data* data, const double x, const double y, const double t) const;
+        double SourceFunction(const double x, const double y, const double t) const;
 
         // Exacte solution if it known (uusefull for validation)
-        double ExactSolution(const Data* data, const double x, const double y) const;
+        double ExactSolution(const double x, const double y) const;
 
         //Boundary condition
-        double BoundaryCondition_Right(const Data* data, const double x, const double y) const;
+        double BoundaryCondition_Right(const double x, const double y) const;
 
-        double BoundaryCondition_Left(const Data* data, const double x, const double y) const;
+        double BoundaryCondition_Left(const double x, const double y) const;
 
-        double BoundaryCondition_Up(const Data* data, const double x, const double y) const;
+        double BoundaryCondition_Up(const double x, const double y) const;
 
-        double BoundaryCondition_Down(const Data* data, const double x, const double y) const;
+        double BoundaryCondition_Down(const double x, const double y) const;
 
 
         

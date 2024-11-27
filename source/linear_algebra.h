@@ -8,6 +8,7 @@
 #include "data.h"
 #include "functions.h"
 #include "matrix.h"
+#include "helpers.h"
 
 class LinearAlgebra {
 
@@ -20,22 +21,27 @@ public:
         return result;
     }
 
+    /*
     double norm(const std::vector<double>& v) {
         return std::sqrt(dot(v, v));
     }
-
-    //Operator overload
-    Matrix& operator*(const Matrix & b) const{
-        int n = this->operator*()
-    };
+     */
 
     LinearAlgebra();
 
     //Resolve the linear systeme AX=b with LU decomposition and backward, forward methods
     std::vector<double> LU(const Matrix& A, const std::vector<double> b);
 
+    //Solve through LU decomposition the system AX=B
+    Matrix LU(const Matrix& A, const Matrix& B);
+
     //Resolve the linear systeme AX=b with the Bi-Conjugate Gradient Stabilised methode
     std::vector<double> BiCGStab(const Matrix& A, const std::vector<double> b, int maxIterations, double tol);
+
+    Matrix BiCGStab(const Matrix& A, const Matrix & B, int maxIterations, double tol);
+
+    //Solves Liapunov problem: Find X s.t. AX - BX = C
+    Matrix solveLiap(const Matrix & A, const Matrix & B, const Matrix & C, int nit);
 
 };
 

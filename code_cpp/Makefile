@@ -15,7 +15,7 @@ exec:
 
 clean:
 	rm -f output/*.dat
-	rm -f output/Explicite_Euler_cas1/*.vtk
+	rm -f output/Implicite_Euler_cas2/*.vtk
 
 clear:
 	rm -f $(TARGET)

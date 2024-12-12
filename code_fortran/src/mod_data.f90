@@ -26,9 +26,23 @@ module data_mod
     
     ![Diffusion coefficient]
     real(pr) :: D
+
+    ![BC SCHWARZ METHODE] (1:Dirichlet, 2:Robin)
+    integer  :: BC_Schwarz
+    integer  :: overlap
     
     ![CAS TEST]
     integer  :: cas
+
+    ![PARALLEL]
+    integer  :: rank
+    integer  :: n_proc
+    integer  :: jbeg
+    integer  :: jend
+    integer  :: l_top
+    integer  :: l_bot
+
+
 
     end type DataType
 
@@ -52,6 +66,8 @@ contains
         call parse_toml(filename, "cfl", data%cfl)
 
         call parse_toml(filename, "D", data%D)
+        call parse_toml(filename, "BC_Schwarz", data%BC_Schwarz)
+        call parse_toml(filename, "overlap", data%overlap)
         call parse_toml(filename, "cas", data%cas)
 
         data%hx = data%Lx / (data%Nx+1)

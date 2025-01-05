@@ -8,12 +8,14 @@ program DiffusionEquation
     implicit none
 
     type(DataType)                      :: df
-    integer                             :: t_iter, io, tag1, tag2
+    integer                             :: t_iter, io
     real(pr)                            :: tn
     real(pr), dimension(:), allocatable :: Un, Unp1, Uexact
+    real(pr)                            :: start_time, end_time
+    real(pr)                            :: elapsed_time_loc, elapsed_time
 
     ! MPI variables
-    integer :: ierr!, rank, size_p, jbeg, jend
+    integer :: ierr
 
     ! Initialize MPI
     call MPI_Init(ierr)
@@ -25,60 +27,67 @@ program DiffusionEquation
     call MPI_Comm_size(MPI_COMM_WORLD, df%n_proc, ierr)
 
     if (df%rank == 0) then 
+        ! Display toml file
         call display_toml_file("./data/data.toml")
     end if
+
+    ! Read data.toml file and save containt into DataType
     call config_data(df, "./data/data.toml")
 
-    
+    ! Charge repartition with overlapping
     call overlapping_charge(df%rank, df%Ny, df%n_proc, df%overlap, df%jbeg, df%jend)
 
-    ! print*,df%rank,'jbeg =',df%jbeg
-    ! print*,df%rank,'jend =',df%jend
+    print*, "----------------------"
+    print*,df%rank,'jbeg =',df%jbeg
+    print*,df%rank,'jend =',df%jend
+    print*, "----------------------"
 
-    allocate(Un(df%Nx*(df%jend-df%jbeg)))
-    allocate(Unp1(df%Nx*(df%jend-df%jbeg)))
-    allocate(Uexact(df%Nx*(df%jend-df%jbeg)))
+    ! Local number of lines 
+    df%jfin = df%jend - df%jbeg + 1
 
-    !overlapping lines = [(n_proc-1)*overlap - n_proc]
-
-    print*, df%rank, "size:", size(Un)
-    if (df%rank == 0) print*, df%rank, "N_pts:", df%N_pts
+    ! Vectors allocation
+    allocate(Un(df%Nx*df%jfin))
+    allocate(Unp1(df%Nx*df%jfin))
+    allocate(Uexact(df%Nx*df%jfin))
     
+    ! Start clock
+    start_time = MPI_Wtime()
+
+    ! Initialize solution and exact solution
     call InitSol(df, Un, Uexact)
 
-    ! Save initial solution, exact solution and error
+    ! Save initial solution and exact solution
     call SaveSol(df, Un, 0, '.dat')
     call SaveSolExact(df, Uexact, 0, '.dat')
 
-    open(newunit=io, file="./output/err.dat", status='replace', action="write")
+    ! Open error_*.dat file to save error
+    if (df%BC_Schwarz == 1) then
+        open(newunit=io, file="./output/error/err_D.dat", status='replace', action="write")
+    elseif (df%BC_Schwarz == 2) then
+        open(newunit=io, file="./output/error/err_R.dat", status='replace', action="write")
+    else
+        print*, "No boundary condition for Schwarz method recognize"
+        stop
+    endif
     
     Unp1 = Un
-    tag1 = 100
-    tag2 = 200
-
     tn = df%t0 + df%dt
+
+    ! -- Time loop -- !
     do t_iter=1,df%niter
+
+        !Send message
+        call SendMessage(df, Un)
+        call MPI_BARRIER(MPI_COMM_WORLD, ierr)
 
         !One more step in time
         call Advance(df, Un, tn, Unp1)
+        !Compute exact sol
+        call ExactSolFunct(df, tn, Uexact)
 
         !Update solution and time step
         Un = Unp1
         tn = tn + df%dt
-
-        !Solution comunication
-        if (t_iter /= df%niter) then
-            if (df%rank == 0) then
-                call MPI_SEND(Un(df%Nx*(df%jend-df%jbeg-df%overlap)), df%Nx, MPI_FLOAT, df%rank+1, tag2, MPI_COMM_WORLD, ierr)
-
-            elseif (df%rank == df%n_proc-1) then
-                call MPI_SEND(Un(df%Nx*df%overlap), df%Nx, MPI_FLOAT, df%rank-1, tag1, MPI_COMM_WORLD, ierr)
-
-            else
-                call MPI_SEND(Un(df%Nx*df%overlap), df%Nx, MPI_FLOAT, df%rank-1, tag1, MPI_COMM_WORLD, ierr)
-                call MPI_SEND(Un(df%Nx*(df%jend-df%jbeg-df%overlap)), df%Nx, MPI_FLOAT, df%rank+1, tag2, MPI_COMM_WORLD, ierr)
-            endif
-        endif
 
         !Save solution, exact solution and error
         call SaveSol(df, Un, t_iter, '.dat')
@@ -86,15 +95,30 @@ program DiffusionEquation
         call SaveErr(df, Un, Uexact, t_iter, tn, io)
 
     enddo
+    ! -- End Time loop -- !
 
+    ! Compute total time
+    end_time = MPI_Wtime()
+    elapsed_time_loc = end_time - start_time
 
-    ! Finalize MPI
+    ! Take the maximum elapsed time among all processors
+    call MPI_Reduce(elapsed_time_loc, elapsed_time, 1, MPI_DOUBLE_PRECISION, MPI_MAX, 0, MPI_COMM_WORLD, ierr)
+
+    ! Save elapse time in output/time/
+    call SaveTime(df, elapsed_time)
+
+    ! Deallocate vectors
     deallocate(Un)
     deallocate(Unp1)
     deallocate(Uexact)
 
+    ! Finalize MPI
     call MPI_Finalize(ierr)
 
-
+    if (ierr == 0 .and. df%rank == 0) then
+        print*, " "
+        print*, "Computaion terminated correclty"
+        print*, "-END-"
+    endif
 
 end program DiffusionEquation

@@ -5,7 +5,7 @@ module save_output_mod
     use MPI
     implicit none
 
-    public :: SaveSol, SaveSolExact
+    public :: SaveSol, SaveSolExact, SaveErr, SaveTime
     
 contains
     subroutine SaveSol(df, SOL, n, format)
@@ -27,11 +27,11 @@ contains
         if (format == '.dat') then
             open(newunit=io, file="./output/dat/sol.me"//trim(adjustl(ch_rank))//"&
             &.tps"//trim(adjustl(ch))//".dat", action="write")
-                do j=1,df%jend-df%jbeg
+                do j=1,df%jfin
+                    y = (df%jbeg-1+j)*df%hy
                     do i=1,df%Nx
                         l = (j-1)*df%Nx + i
                         x = i*df%hx
-                        y = (df%jbeg + j)*df%hy
                         write(io, *) x, y, SOL(l)
                     enddo
                 enddo
@@ -45,15 +45,15 @@ contains
             write(io, *) "sol"
             write(io, *) "ASCII"
             write(io, *) "DATASET STRUCTURED_POINTS"
-            write(io, *) "DIMENSIONS", df%Nx, df%jend-df%jbeg, 1
+            write(io, *) "DIMENSIONS", df%Nx, df%jfin, 1
             write(io, *) "ORIGIN", 0, 0, 0
             write(io, *) "SPACING", df%hx, df%hy, 1
-            write(io, *) "POINT_DATA", df%Nx*(df%jend-df%jbeg)
+            write(io, *) "POINT_DATA", df%Nx*(df%jfin)
             write(io, *) "LOOKUP_TABLE default"
 
 
 
-                do j=1,df%jend-df%jbeg
+                do j=1,df%jfin
                     do i=1,df%Nx
                         l = (j-1)*df%Nx + i
                         write(io, *) SOL(l)
@@ -84,11 +84,12 @@ contains
         if (format == '.dat') then
             open(newunit=io, file="./output/dat/exact/sol.me"//trim(adjustl(ch_rank))//"&
             &.tps"//trim(adjustl(ch))//".dat", action="write")
-                do j=1,df%jend-df%jbeg
+                do j=1,df%jfin
+                    y = (df%jbeg-1+j)*df%hy
                     do i=1,df%Nx
                         l = (j-1)*df%Nx + i
                         x = i*df%hx
-                        y = (df%jbeg + j)*df%hy
+                        
                         write(io, *) x, y, SOL(l)
                     enddo
                 enddo
@@ -102,16 +103,16 @@ contains
             write(io, *) "sol"
             write(io, *) "ASCII"
             write(io, *) "DATASET STRUCTURED_POINTS"
-            write(io, *) "DIMENSIONS", df%Nx, df%jend-df%jbeg, 1
+            write(io, *) "DIMENSIONS", df%Nx, df%jfin, 1
             write(io, *) "ORIGIN", 0, 0, 0
             write(io, *) "SPACING", df%hx, df%hy, 1
-            write(io, *) "POINT_DATA", df%Nx*(df%jend-df%jbeg)
+            write(io, *) "POINT_DATA", df%Nx*(df%jfin)
             write(io, *) "SCALARS sol float"
             write(io, *) "LOOKUP_TABLE default"
 
 
 
-                do j=1,df%jend-df%jbeg
+                do j=1,df%jfin
                     do i=1,df%Nx
                         l = (j-1)*df%Nx + i
                         write(io, *) SOL(l)
@@ -138,7 +139,7 @@ contains
 
         local_err = 0._pr
 
-        do j=1,df%jend-df%jbeg
+        do j=1,df%jfin
             do i=1,df%Nx
                 l = (j-1)*df%Nx + i
                 local_err = local_err + (EXACT(l) - SOL(l))**2
@@ -157,5 +158,39 @@ contains
         endif
         
     end subroutine SaveErr
+
+    subroutine SaveTime(df, elapsed_time)
+
+        !In
+        type(DataType), intent(in) :: df
+        real(pr), intent(in)       :: elapsed_time
+
+        !Local
+        integer :: unit
+        character(len=125) :: ch_n_proc, ch_overlap, ch_Nx, ch_BC
+
+        unit = 10
+        write(ch_n_proc, '(I5)') df%n_proc
+        write(ch_overlap, '(I5)') df%overlap
+        write(ch_Nx, '(I5)') df%Nx
+
+        if (df%BC_Schwarz == 1) ch_BC = "Dirichlet"
+        if (df%BC_Schwarz == 2) ch_BC = "Robin"
+
+
+
+        if (df%rank==0) open(newunit=unit,&
+        ! file="./output/time/BC."//trim(adjustl(ch_BC))//".overlap."//trim(adjustl(ch_overlap))//".dat",&
+        ! status='replace', action="write")
+        ! file="./output/time/BC."//trim(adjustl(ch_BC))//".Nx."//trim(adjustl(ch_Nx))//".dat",&
+        ! status='replace', action="write")
+        file="./output/time/BC."//trim(adjustl(ch_BC))//".np."//trim(adjustl(ch_n_proc))//".dat",&
+        status='replace', action="write")
+
+        write(unit, *) elapsed_time
+
+        if (df%rank==0) close(unit)
+
+    end subroutine SaveTime
 
 end module save_output_mod

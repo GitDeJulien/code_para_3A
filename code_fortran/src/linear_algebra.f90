@@ -3,6 +3,8 @@ module linear_algebra_mod
     use scheme_mod
     implicit none
 
+    public Lap_BiCGStab
+
 contains
 
     subroutine Lap_BiCGStab(df, b, max_it, tol, X)
@@ -15,13 +17,13 @@ contains
         real(pr), intent(in)               :: tol
 
         !Out
-        real(pr), dimension(1:df%Nx*(df%jend-df%jbeg)), intent(out) :: X
+        real(pr), dimension(1:df%Nx*df%jfin), intent(out) :: X
 
         !Local
         integer                                         :: iter
-        real(pr), dimension(1:df%Nx*(df%jend-df%jbeg))  :: r
-        real(pr), dimension(1:df%Nx*(df%jend-df%jbeg))  :: r0
-        real(pr), dimension(1:df%Nx*(df%jend-df%jbeg))  :: p, v, s, t, h
+        real(pr), dimension(1:df%Nx*df%jfin)  :: r
+        real(pr), dimension(1:df%Nx*df%jfin)  :: r0
+        real(pr), dimension(1:df%Nx*df%jfin)  :: p, v, s, t, h
         real(pr)                                        :: rho, alpha, omega
         real(pr)                                        :: rho_prev, beta
         real(pr)                                        :: normB

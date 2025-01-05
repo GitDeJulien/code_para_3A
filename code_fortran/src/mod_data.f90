@@ -22,7 +22,6 @@ module data_mod
     integer  :: niter
     real(pr) :: dt
     real(pr) :: tfinal
-    real(pr) :: cfl
     
     ![Diffusion coefficient]
     real(pr) :: D
@@ -30,6 +29,8 @@ module data_mod
     ![BC SCHWARZ METHODE] (1:Dirichlet, 2:Robin)
     integer  :: BC_Schwarz
     integer  :: overlap
+    real(pr) :: acoeff
+    real(pr) :: bcoeff
     
     ![CAS TEST]
     integer  :: cas
@@ -39,9 +40,7 @@ module data_mod
     integer  :: n_proc
     integer  :: jbeg
     integer  :: jend
-    integer  :: l_top
-    integer  :: l_bot
-
+    integer  :: jfin
 
 
     end type DataType
@@ -63,16 +62,18 @@ contains
         call parse_toml(filename, "t0", data%t0)
         call parse_toml(filename, "niter", data%niter)
         call parse_toml(filename, "dt", data%dt)
-        call parse_toml(filename, "cfl", data%cfl)
 
         call parse_toml(filename, "D", data%D)
         call parse_toml(filename, "BC_Schwarz", data%BC_Schwarz)
         call parse_toml(filename, "overlap", data%overlap)
+        call parse_toml(filename, "acoeff", data%acoeff)
+        call parse_toml(filename, "bcoeff", data%bcoeff)
+        
         call parse_toml(filename, "cas", data%cas)
 
         data%hx = data%Lx / (data%Nx+1)
         data%hy = data%Ly / (data%Ny+1)
-        data%N_pts = data%Nx*data%Ny
+        data%N_pts = (data%Nx)*(data%Ny)
 
         data%tfinal = data%dt*data%niter
         nb_iteration = CEILING((data%tfinal-data%t0)/data%dt, kind=selected_int_kind(8)) 
